@@ -1,0 +1,17 @@
+.button {
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.button:hover {
+  font-size: 1.2rem;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+}
+
+form > input {
+  max-width: 50vw;
+}
