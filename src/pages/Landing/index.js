@@ -2,8 +2,25 @@ import React from "react";
 import "./Landing.css";
 // import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import axios from "axios";
 
 function Landing(props) {
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const body = {
+      name: e.target.username.value,
+      password: e.target.password.value,
+    };
+    const URL = "http://localhost:8000/auth";
+    axios
+      .post(URL, body)
+      .then((response) => {
+        const token = response.data.result.token;
+        localStorage.setItem("web-starter-token", JSON.stringify(token));
+        props.history.push("/app");
+      })
+      .catch((err) => console.error(err));
+  };
   return (
     <main className="container">
       <h1>Landing Page</h1>
@@ -32,9 +49,9 @@ function Landing(props) {
         </ul>
       </nav>
       <section className="auth">
-        <form className="login">
-          <label htmlFor="email">Email</label>
-          <input type="text" name="email" />
+        <form className="login" onSubmit={submitHandler}>
+          <label htmlFor="username">Username</label>
+          <input type="text" name="username" />
           <label htmlFor="password">Password</label>
           <input type="password" name="password" />
           <Button type="submit" className="mt-1" variant="secondary">

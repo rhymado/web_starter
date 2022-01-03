@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import logo from "../../logo.svg";
 import "./App.css";
 
 import Text from "../../components/Text";
 import Counter from "../../components/Counter";
+import axios from "axios";
 
 class App extends Component {
   state = {
@@ -17,6 +18,7 @@ class App extends Component {
         schedule: "Wed 17:00 - 18:00",
       },
     ],
+    userToken: "",
   };
   onClickPrevious = () => {
     const number = this.state.counter;
@@ -36,21 +38,51 @@ class App extends Component {
       counter: number + 1,
     });
   };
+  onLogout = () => {
+    // axios delete untuk logout
+    // jika berhasil
+    localStorage.removeItem("web-starter-token");
+    this.setState({
+      userToken: "",
+    });
+    // jika gagal
+  };
   componentDidUpdate() {
     console.log("update");
   }
   componentDidMount() {
     console.log("did mount");
+    const token = JSON.parse(localStorage.getItem("web-starter-token"));
+    // if (!token) {
+    //   return this.props.history.replace("/");
+    // }
+    const URL = "http://localhost:8000/classes?name=i&category_id=3";
+    axios
+      .get(URL, {
+        headers: {
+          "x-access-token": token,
+        },
+      })
+      .then((response) => console.log(response.data))
+      .catch((err) => {
+        // jika error 403 dan role tidak cocok
+        // kamu hapus token
+        console.error(err);
+      });
+    this.setState({
+      userToken: token,
+    });
   }
   render() {
-    console.log(this.state);
+    const token = JSON.parse(localStorage.getItem("web-starter-token"));
+    if (!token) return <Redirect to="/" />;
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="title">Welcome</h1>
           {/* <Link to="/">
-            <p>go to landing page</p>
-          </Link> */}
+              <p>go to landing page</p>
+            </Link> */}
           <button
             onClick={() => {
               this.props.history.push("/");
@@ -96,6 +128,11 @@ class App extends Component {
             <input type="text" name="konten" />
             <button type="submit">Ubah</button>
           </form>
+          <section>
+            <div className="button" onClick={this.onLogout}>
+              Logout
+            </div>
+          </section>
         </header>
       </div>
     );
