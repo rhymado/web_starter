@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
+import axios from "axios";
 
 import logo from "../../logo.svg";
 import "./App.css";
 
 import Text from "../../components/Text";
 import Counter from "../../components/Counter";
-import axios from "axios";
+import { themeContext } from "../../contexts/theme";
 
 class App extends Component {
   state = {
@@ -76,20 +77,22 @@ class App extends Component {
   render() {
     const token = JSON.parse(localStorage.getItem("web-starter-token"));
     if (!token) return <Redirect to="/" />;
+    const { theme, toggleTheme } = this.context;
     return (
       <div className="App">
-        <header className="App-header">
+        <header className={`App-header ${theme === "dark" ? "dark" : "light"}`}>
           <h1 className="title">Welcome</h1>
           {/* <Link to="/">
               <p>go to landing page</p>
             </Link> */}
           <button
             onClick={() => {
-              this.props.history.push("/");
+              this.props.history.push("/cashier");
             }}
           >
-            <p>go to landing page</p>
+            <p>go to cashier</p>
           </button>
+          <button onClick={toggleTheme}>Toggle Theme</button>
           <img src={logo} className="App-logo" alt="logo" />
           {/* <p>
             Edit <code>src/App.js</code> and save to reload.
@@ -138,5 +141,5 @@ class App extends Component {
     );
   }
 }
-
+App.contextType = themeContext;
 export default App;

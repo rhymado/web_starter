@@ -2,9 +2,9 @@ import React from "react";
 import "./Landing.css";
 // import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import axios from "axios";
+import { login } from "../../utils/https/auth";
 
-import gitLogo from "../../assets/img/git.png";
+// import gitLogo from "../../assets/img/git.png";
 
 function Landing(props) {
   const submitHandler = (e) => {
@@ -13,9 +13,10 @@ function Landing(props) {
       name: e.target.username.value,
       password: e.target.password.value,
     };
-    const URL = "http://localhost:8000/auth";
-    axios
-      .post(URL, body)
+    // const URL = process.env.REACT_APP_HOST + "/auth";
+    // axios
+    //   .post(URL, body)
+    login(body)
       .then((response) => {
         const token = response.data.result.token;
         localStorage.setItem("web-starter-token", JSON.stringify(token));
@@ -46,7 +47,7 @@ function Landing(props) {
               }}
             >
               <p>/app</p>
-              <img src={gitLogo} alt="logo-git" />
+              {/* <img src={gitLogo} alt="logo-git" /> */}
             </div>
           </li>
         </ul>
