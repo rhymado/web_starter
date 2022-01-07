@@ -4,7 +4,7 @@ import "./Landing.css";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
-import GitLogo from "../../assets/img/git.png";
+import gitLogo from "../../assets/img/git.png";
 
 function Landing(props) {
   const submitHandler = (e) => {
@@ -46,7 +46,7 @@ function Landing(props) {
               }}
             >
               <p>/app</p>
-              <img src={GitLogo} alt="logo-git" />
+              <img src={gitLogo} alt="logo-git" />
             </div>
           </li>
         </ul>
