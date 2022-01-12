@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import axios from "axios";
 
 import logo from "../../logo.svg";
@@ -8,6 +9,7 @@ import "./App.css";
 import Text from "../../components/Text";
 import Counter from "../../components/Counter";
 import { themeContext } from "../../contexts/theme";
+import { toggleTheme as toggleThemeAction } from "../../redux/actions/theme";
 
 class App extends Component {
   state = {
@@ -48,15 +50,15 @@ class App extends Component {
     });
     // jika gagal
   };
-  componentDidUpdate() {
-    console.log("update");
-  }
+  // componentDidUpdate() {
+  //   console.log("update");
+  // }
   componentDidMount() {
     console.log("did mount");
     const token = JSON.parse(localStorage.getItem("web-starter-token"));
-    // if (!token) {
-    //   return this.props.history.replace("/");
-    // }
+    if (!token) {
+      return;
+    }
     const URL = "http://localhost:8000/classes?name=i&category_id=3";
     axios
       .get(URL, {
@@ -74,10 +76,16 @@ class App extends Component {
       userToken: token,
     });
   }
+  toggleThemeRedux = () => {
+    // secara natural dispatch bisa diambil dari props jika sudah
+    // disambungkan dengan redux
+    this.props.dispatch(toggleThemeAction());
+  };
   render() {
     const token = JSON.parse(localStorage.getItem("web-starter-token"));
     if (!token) return <Redirect to="/" />;
     const { theme, toggleTheme } = this.context;
+    // console.log("[PROPS REDUX STORE]", this.props.theme);
     return (
       <div className="App">
         <header className={`App-header ${theme === "dark" ? "dark" : "light"}`}>
@@ -87,12 +95,20 @@ class App extends Component {
             </Link> */}
           <button
             onClick={() => {
-              this.props.history.push("/cashier");
+              this.props.history.push("/pokemon");
             }}
           >
-            <p>go to cashier</p>
+            <p>go to pokemon</p>
           </button>
-          <button onClick={toggleTheme}>Toggle Theme</button>
+          <button
+            onClick={() => {
+              toggleTheme();
+              // this.toggleThemeRedux();
+              this.props.toggleThemeRedux();
+            }}
+          >
+            Toggle Theme
+          </button>
           <img src={logo} className="App-logo" alt="logo" />
           {/* <p>
             Edit <code>src/App.js</code> and save to reload.
@@ -142,4 +158,25 @@ class App extends Component {
   }
 }
 App.contextType = themeContext;
-export default App;
+
+// HOC = Higher Order Component
+// Komposisi komponen
+const mapStateToProps = (state) => {
+  return {
+    theme: state.theme,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleThemeRedux: () => {
+      dispatch(toggleThemeAction());
+    },
+  };
+};
+const AppWithRedux = connect(mapStateToProps, mapDispatchToProps)(App);
+// () 1
+// parameter = mapStateToProps, mapDispatchToProps
+// () 2
+// parameter = komponen yang mau disambungkan ke redux
+// export default App;
+export default AppWithRedux;

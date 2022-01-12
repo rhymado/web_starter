@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { connect } from "react-redux";
 import "./index.css";
 
 function Card(props) {
@@ -41,8 +42,14 @@ class Pokemon extends React.Component {
     return pokemonsView;
   };
   render() {
+    const { theme } = this.props;
+    // console.log(theme.themeColor);
+    const style = {
+      backgroundColor: theme.themeColor === "dark" ? "grey" : "cornflowerblue",
+    };
+    // console.log(style);
     return (
-      <div>
+      <div style={style}>
         <h1>Pokemon</h1>
         {/* js yang mereturnkan elemen html */}
         {this.getPokemonView()}
@@ -56,4 +63,10 @@ class Pokemon extends React.Component {
   }
 }
 
-export default Pokemon;
+const mapStateToProps = (state) => {
+  return {
+    theme: state.theme,
+  };
+};
+
+export default connect(mapStateToProps)(Pokemon);

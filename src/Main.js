@@ -6,6 +6,8 @@ import {
   Switch,
 } from "react-router-dom";
 // react-router-dom v5.2.0
+import { Provider as ReduxProvider } from "react-redux";
+import store from "./redux/store";
 
 import Landing from "./pages/Landing";
 import App from "./pages/App";
@@ -55,46 +57,49 @@ class Main extends React.Component {
         <themeContext.Provider
           value={{ theme: this.state.theme, toggleTheme: this.toggleTheme }}
         >
-          <Router>
-            <Switch>
-              <Route
-                exact
-                path="/"
-                render={(routerProps) => {
-                  // routerProps => props yang diberikan oleh router
-                  // match, history, location
-                  return <Landing username="Arik" {...routerProps} />;
-                }}
-              />
-              {/* jika pakai atribut render, yang dipassing apa yang 
+          <ReduxProvider store={store}>
+            <Router>
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  render={(routerProps) => {
+                    // routerProps => props yang diberikan oleh router
+                    // match, history, location
+                    return <Landing username="Arik" {...routerProps} />;
+                  }}
+                />
+                {/* jika pakai atribut render, yang dipassing apa yang 
               diberikan ke komponen tsb (manual passing) */}
-              <Route path="/app" component={App} />
-              {/* jika pakai atribut component, yang dipassing hanya 
+                <Route path="/app" component={App} />
+                {/* jika pakai atribut component, yang dipassing hanya 
               props router saja (automatic passing) */}
-              <Route
-                path="/pokemon/:id"
-                render={(routerProps) => {
-                  const { match } = routerProps;
-                  if (!accessToken)
-                    return (
-                      <Redirect from={`/pokemon/${match.params.id}`} to="/" />
-                    );
-                  return <Detail {...routerProps} />;
-                }}
-              />
-              <Route
-                path="/pokemon"
-                render={(routerProps) => {
-                  if (!accessToken) return <Redirect from="/pokemon" to="/" />;
-                  return <Pokemon {...routerProps} />;
-                }}
-              />
-              <Route path="/sales" component={Sales} />
-              <Route path="/cashier" component={Cashier} />
-              <Route path="*" component={NotFound} />
-              {/* <Redirect from="*" to="/" /> */}
-            </Switch>
-          </Router>
+                <Route
+                  path="/pokemon/:id"
+                  render={(routerProps) => {
+                    const { match } = routerProps;
+                    if (!accessToken)
+                      return (
+                        <Redirect from={`/pokemon/${match.params.id}`} to="/" />
+                      );
+                    return <Detail {...routerProps} />;
+                  }}
+                />
+                <Route
+                  path="/pokemon"
+                  render={(routerProps) => {
+                    if (!accessToken)
+                      return <Redirect from="/pokemon" to="/" />;
+                    return <Pokemon {...routerProps} />;
+                  }}
+                />
+                <Route path="/sales" component={Sales} />
+                <Route path="/cashier" component={Cashier} />
+                <Route path="*" component={NotFound} />
+                {/* <Redirect from="*" to="/" /> */}
+              </Switch>
+            </Router>
+          </ReduxProvider>
         </themeContext.Provider>
       </authContext.Provider>
     );
