@@ -1,6 +1,6 @@
 import { ACTION_STRING } from "../actions/actionString";
 const initialState = {
-  theme: "dark",
+  themeColor: "dark",
 };
 const themeReducer = (prevState = initialState, action) => {
   // buat handler untuk masing masing action type
@@ -8,11 +8,11 @@ const themeReducer = (prevState = initialState, action) => {
   switch (action.type) {
     case ACTION_STRING.toggleTheme:
       let newTheme = "dark";
-      if (prevState.theme === "dark") newTheme = "light";
+      if (prevState.themeColor === "dark") newTheme = "light";
       //   if (prevState.theme === "light") newTheme = "dark";
       return {
         ...prevState,
-        theme: newTheme,
+        themeColor: newTheme,
       };
 
     default:

@@ -3,7 +3,7 @@ import { ActionType } from "redux-promise-middleware";
 
 const initialState = {
   userData: {
-    token: JSON.parse(localStorage["web-starter-token"]) || "",
+    token: JSON.parse(localStorage["web-starter-token"] || null),
     photo: "",
     role: 0,
   },
@@ -13,7 +13,7 @@ const initialState = {
   err: {},
 };
 const authReducer = (prevState = initialState, action) => {
-  const { authLogin, pending, fulfilled, rejected } = ACTION_STRING;
+  const { authLogin } = ACTION_STRING;
   const { Pending, Fulfilled, Rejected } = ActionType;
   // membuat logic berdasarkan action
   switch (action.type) {
