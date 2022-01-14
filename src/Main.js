@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import Detail from "./pages/PokemonDetail";
 import Sales from "./pages/Sales";
 import Cashier from "./pages/Cashier";
+import Hooks from "./pages/Hooks";
 
 import { authContext } from "./contexts/auth";
 import { themeContext } from "./contexts/theme";
@@ -95,6 +96,7 @@ class Main extends React.Component {
                 />
                 <Route path="/sales" component={Sales} />
                 <Route path="/cashier" component={Cashier} />
+                <Route path="/hooks" component={Hooks} />
                 <Route path="*" component={NotFound} />
                 {/* <Redirect from="*" to="/" /> */}
               </Switch>
