@@ -10,6 +10,7 @@ import Text from "../../components/Text";
 import Counter from "../../components/Counter";
 import { themeContext } from "../../contexts/theme";
 import { toggleTheme as toggleThemeAction } from "../../redux/actions/theme";
+import { getClasses } from "../../utils/https/classes";
 
 class App extends Component {
   state = {
@@ -59,13 +60,8 @@ class App extends Component {
     if (!token) {
       return;
     }
-    const URL = "http://localhost:8000/classes?name=i&category_id=3";
-    axios
-      .get(URL, {
-        headers: {
-          "x-access-token": token,
-        },
-      })
+
+    getClasses(token)
       .then((response) => console.log(response.data))
       .catch((err) => {
         // jika error 403 dan role tidak cocok
