@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import axios from "axios";
+// import axios from "axios";
 
 import logo from "../../logo.svg";
 import "./App.css";

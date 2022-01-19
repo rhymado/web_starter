@@ -1,7 +1,7 @@
 import React from "react";
 import {
   BrowserRouter as Router,
-  Redirect,
+  // Redirect,
   Route,
   Switch,
 } from "react-router-dom";
@@ -44,7 +44,7 @@ class Main extends React.Component {
     });
   }
   render() {
-    const accessToken = JSON.parse(localStorage.getItem("web-starter-token"));
+    // const accessToken = JSON.parse(localStorage.getItem("web-starter-token"));
     return (
       // <BrowserRouter>
       //   <Routes>
@@ -78,19 +78,19 @@ class Main extends React.Component {
                 <Route
                   path="/pokemon/:id"
                   render={(routerProps) => {
-                    const { match } = routerProps;
-                    if (!accessToken)
-                      return (
-                        <Redirect from={`/pokemon/${match.params.id}`} to="/" />
-                      );
+                    // const { match } = routerProps;
+                    // if (!accessToken)
+                    //   return (
+                    //     <Redirect from={`/pokemon/${match.params.id}`} to="/" />
+                    //   );
                     return <Detail {...routerProps} />;
                   }}
                 />
                 <Route
                   path="/pokemon"
                   render={(routerProps) => {
-                    if (!accessToken)
-                      return <Redirect from="/pokemon" to="/" />;
+                    // if (!accessToken)
+                    //   return <Redirect from="/pokemon" to="/" />;
                     return <Pokemon {...routerProps} />;
                   }}
                 />

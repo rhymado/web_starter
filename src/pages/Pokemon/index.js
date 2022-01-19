@@ -14,10 +14,25 @@ function Card(props) {
 class Pokemon extends React.Component {
   state = {
     pokemons: [],
+    next: "",
+    prev: "",
+    page: 1,
   };
   componentDidMount() {
+    this.getPokemonData();
+  }
+  getPokemonData = () => {
     const URL = "https://pokeapi.co/api/v2/pokemon";
     const { location } = this.props;
+    console.log("get", location.search);
+    // const params = location.search
+    //   .slice(1)
+    //   .split("&")
+    //   .map((param) => param.replace(/=/, ":"))
+    //   .join(",");
+    // const paramsObject = "{".concat(params, "}");
+    // console.log(paramsObject);
+    // localStorage["test"] = JSON.stringify({ foo: "bar", bar: "foo" });
     setTimeout(() => {
       axios
         .get(URL + location.search)
@@ -25,13 +40,15 @@ class Pokemon extends React.Component {
           console.log("RESPONSE", response.data);
           this.setState({
             pokemons: response.data.results,
+            next: response.data.next,
+            prev: response.data.prev,
           });
         })
         .catch((error) => {
           console.log("ERROR", error);
         });
     }, 1000);
-  }
+  };
   getPokemonView = () => {
     const { pokemons } = this.state;
     const pokemonsView = [];
@@ -41,22 +58,46 @@ class Pokemon extends React.Component {
     }
     return pokemonsView;
   };
+  onNextPage = () => {
+    this.setState(
+      () => ({
+        page: this.state.page + 1,
+      }),
+      () => {
+        this.props.history.push(
+          `?limit=10&offset=${10 * (this.state.page - 1)}`
+        );
+        console.log("cb", this.props.location.search);
+        this.getPokemonData();
+      }
+    );
+  };
+  onPrevPage = () => {};
   render() {
+    console.log("render", this.props.location.search);
     const { theme } = this.props;
     // console.log(theme.themeColor);
     const style = {
       backgroundColor: theme.themeColor === "dark" ? "grey" : "cornflowerblue",
     };
     // console.log(style);
+    if (!this.props.location.search)
+      this.props.history.push("?limit=10&offset=0");
     return (
       <div style={style}>
         <h1>Pokemon</h1>
         {/* js yang mereturnkan elemen html */}
-        {this.getPokemonView()}
+        {/* {this.getPokemonView()} */}
         <section className="d-flex w-100 justify-content-around flex-wrap">
           {this.state.pokemons.map((pokemon, idx) => (
             <Card name={pokemon.name} key={idx} />
           ))}
+        </section>
+        <section className="d-flex justify-content-center">
+          <div className="btn arrow">&lt;</div>
+          <div className="btn arrow" onClick={this.onNextPage}>
+            &gt;
+          </div>
         </section>
       </div>
     );
